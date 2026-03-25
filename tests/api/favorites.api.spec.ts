@@ -38,3 +38,25 @@ test('alta y listado de favoritos persisten un personaje', async ({ request }) =
   expect(listBody.items).toHaveLength(1);
   expect(listBody.items[0].externalCharacterId).toBe(characterId);
 });
+
+test('requests invalidos devuelven errores controlados', async ({ request }) => {
+  const missingQueryResponse = await request.get('characters');
+  expect(missingQueryResponse.status()).toBe(400);
+  await expect(missingQueryResponse.json()).resolves.toEqual({
+    error: 'Query parameter "name" is required.',
+  });
+
+  const invalidFavoriteResponse = await request.post('favorites', {
+    data: { characterId: 0 },
+  });
+  expect(invalidFavoriteResponse.status()).toBe(400);
+  await expect(invalidFavoriteResponse.json()).resolves.toEqual({
+    error: 'Body field "characterId" must be a positive integer.',
+  });
+
+  const missingFavoriteResponse = await request.delete('favorites/999999');
+  expect(missingFavoriteResponse.status()).toBe(404);
+  await expect(missingFavoriteResponse.json()).resolves.toEqual({
+    error: 'Favorite not found.',
+  });
+});
