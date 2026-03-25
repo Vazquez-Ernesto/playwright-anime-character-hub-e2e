@@ -2,6 +2,9 @@
   "name": "anime-character-hub-e2e",
   "version": "1.0.0",
   "description": "Portfolio full stack de QA Automation end-to-end con Playwright, React, Express y PostgreSQL",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "workspaces": [
     "apps/frontend",
     "apps/backend"
@@ -19,6 +22,7 @@
     "test:ui": "playwright test --project=ui",
     "test:api": "playwright test --project=api",
     "test:db": "playwright test --project=db",
+    "test:ci": "npm run build && playwright test",
     "test:headed": "playwright test --project=ui --headed",
     "report": "playwright show-report"
   },

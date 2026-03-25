@@ -1,5 +1,8 @@
 # anime-character-hub-e2e
 
+[![CI](https://github.com/Vazquez-Ernesto/playwright-anime-character-hub-e2e/actions/workflows/ci.yml/badge.svg)](https://github.com/Vazquez-Ernesto/playwright-anime-character-hub-e2e/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+
 Portfolio full stack orientado a demostrar QA Automation moderna de punta a punta sobre un dominio reconocible: Dragon Ball.
 
 La arquitectura evita que el frontend consuma servicios externos de forma directa. El flujo real queda así:
@@ -72,6 +75,7 @@ cp .env.example .env
 2. Instalar dependencias:
 
 ```bash
+nvm use
 npm install
 npx playwright install chromium
 ```
@@ -106,10 +110,18 @@ npm run build
 npm run db:up
 npm run db:down
 npm run test
+npm run test:ci
 npm run test:ui
 npm run test:api
 npm run test:db
 ```
+
+## Señales de calidad del repo
+
+- `LICENSE` MIT real para que GitHub detecte licencia del proyecto
+- `.nvmrc` y `engines.node` para alinear desarrollo local con CI
+- CI en GitHub Actions que construye apps y ejecuta la suite Playwright completa
+- reporte HTML de Playwright publicado como artefacto del workflow
 
 ## Variables de entorno
 
@@ -135,14 +147,30 @@ La suite Playwright cubre tres niveles:
 - API: salud, búsqueda y CRUD básico de favoritos
 - DB: validación directa de persistencia de favoritos, historial y cache
 
+## Evidencia visual
+
+La carpeta `docs/screenshots/` ya está preparada para subir capturas o un GIF del flujo principal y linkearlos desde este README.
+
+Assets sugeridos:
+
+- `docs/screenshots/home-search.png`
+- `docs/screenshots/character-detail.png`
+- `docs/screenshots/favorites-panel.png`
+- `docs/screenshots/ui-flow.gif`
+
 ## CI
 
 El repositorio incluye un workflow base de GitHub Actions en `.github/workflows/ci.yml` que:
 
 - levanta PostgreSQL como servicio
 - instala dependencias y Chromium
-- ejecuta `npm test`
+- ejecuta `npm run test:ci` para validar build y tests
 - publica el reporte HTML de Playwright como artefacto
+
+## Próximos pasos de publicación
+
+- subir capturas reales o un GIF a `docs/screenshots/`
+- abrir el primer release/tag (`v1.0.0`) con una descripción breve del alcance
 
 ## Estado del proyecto
 
