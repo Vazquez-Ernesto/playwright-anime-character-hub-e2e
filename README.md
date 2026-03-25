@@ -218,6 +218,10 @@ Assets sugeridos:
 - `docs/screenshots/favorites-panel.png`
 - `docs/screenshots/ui-flow.gif`
 
+## Playwright MCP
+
+Dejé una guía base para preparar Playwright MCP con este proyecto en `docs/playwright-mcp.md`.
+
 ## CI
 
 El repositorio incluye un workflow base de GitHub Actions en `.github/workflows/ci.yml` que:
