@@ -1,6 +1,4 @@
-import cors from 'cors';
 import express from 'express';
-import { env } from './config/env';
 import { ensureSchema } from './db/migrate';
 import { characterRoutes } from './routes/characterRoutes';
 import { favoriteRoutes } from './routes/favoriteRoutes';
@@ -8,11 +6,36 @@ import { healthRoutes } from './routes/healthRoutes';
 
 export const app = express();
 
-app.use(
-  cors({
-    origin: [`http://127.0.0.1:${env.frontendPort}`, `http://localhost:${env.frontendPort}`],
-  })
-);
+const allowedOrigins = new Set([
+  'http://127.0.0.1:4173',
+  'http://127.0.0.1:4174',
+  'http://localhost:4173',
+  'http://localhost:4174',
+]);
+
+app.use((request, response, next) => {
+  const requestOrigin = typeof request.headers.origin === 'string' ? request.headers.origin : undefined;
+
+  if (requestOrigin) {
+    if (!allowedOrigins.has(requestOrigin)) {
+      response.status(403).json({ error: `Origin ${requestOrigin} is not allowed by CORS.` });
+      return;
+    }
+
+    response.header('Access-Control-Allow-Origin', requestOrigin);
+    response.header('Vary', 'Origin');
+  }
+
+  response.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  response.header('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (request.method === 'OPTIONS') {
+    response.status(204).send();
+    return;
+  }
+
+  next();
+});
 app.use(express.json());
 
 app.use('/api', healthRoutes);
