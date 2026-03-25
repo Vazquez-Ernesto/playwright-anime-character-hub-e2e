@@ -134,10 +134,13 @@ FRONTEND_PORT=4173
 PLAYWRIGHT_BASE_URL=http://127.0.0.1:4173
 API_BASE_URL=http://127.0.0.1:4000
 VITE_API_URL=http://127.0.0.1:4000/api
+VITE_API_PROXY_TARGET=http://127.0.0.1:4000
 DRAGON_BALL_API_BASE_URL=https://dragonball-api.com/api
 CACHE_TTL_SECONDS=3600
 DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/anime_character_hub
 ```
+
+En desarrollo, Vite proxyea `/api` hacia `VITE_API_PROXY_TARGET` para que el frontend del navegador no dependa de CORS del puerto `4000`.
 
 ## Testing
 

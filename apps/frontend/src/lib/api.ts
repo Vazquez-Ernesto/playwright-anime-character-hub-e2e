@@ -1,6 +1,6 @@
 import type { CharacterDetail, CharacterSummary, Favorite, SearchHistoryEntry } from '../types';
 
-const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:4000/api';
+const apiBaseUrl = import.meta.env.DEV ? '/api' : import.meta.env.VITE_API_URL || '/api';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${apiBaseUrl}${path}`, {
