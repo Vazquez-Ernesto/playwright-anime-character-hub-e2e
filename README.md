@@ -150,6 +150,63 @@ La suite Playwright cubre tres niveles:
 - API: salud, búsqueda y CRUD básico de favoritos
 - DB: validación directa de persistencia de favoritos, historial y cache
 
+## Pruebas manuales de API
+
+Con backend levantado en `http://127.0.0.1:4000`, podés probar desde terminal así:
+
+```bash
+export API_BASE_URL=http://127.0.0.1:4000/api
+```
+
+Health check:
+
+```bash
+curl "$API_BASE_URL/health"
+```
+
+Buscar personajes:
+
+```bash
+curl "$API_BASE_URL/characters?name=Goku"
+curl "$API_BASE_URL/characters?name=Vegeta"
+```
+
+Listar favoritos:
+
+```bash
+curl "$API_BASE_URL/favorites"
+```
+
+Crear favorito:
+
+```bash
+curl -X POST "$API_BASE_URL/favorites" \
+  -H "Content-Type: application/json" \
+  -d '{"characterId": 1}'
+```
+
+Eliminar favorito:
+
+```bash
+curl -X DELETE "$API_BASE_URL/favorites/1" -i
+```
+
+Ver historial de búsquedas:
+
+```bash
+curl "$API_BASE_URL/search-history"
+```
+
+Errores esperados:
+
+```bash
+curl -i "$API_BASE_URL/characters"
+curl -i -X POST "$API_BASE_URL/favorites" \
+  -H "Content-Type: application/json" \
+  -d '{"characterId": 0}'
+curl -i -X DELETE "$API_BASE_URL/favorites/999999"
+```
+
 ## Evidencia visual
 
 La carpeta `docs/screenshots/` ya está preparada para subir capturas o un GIF del flujo principal y linkearlos desde este README.

@@ -54,3 +54,28 @@ test('muestra estado vacio y permite eliminar un favorito guardado', async ({ pa
   await expect(page.getByText('No hay favoritos guardados todavía.')).toBeVisible();
   await expect(page.getByTestId('favorites-count')).toHaveText('0');
 });
+
+test('refleja historial de busquedas con source external y cache', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByTestId('character-search-input').fill('Frieza');
+  await page.getByTestId('character-search-button').click();
+  await expect(page.getByTestId('search-status')).toContainText('external');
+
+  await page.getByTestId('character-search-button').click();
+  await expect(page.getByTestId('search-status')).toContainText('cache');
+
+  const historyList = page.getByTestId('search-history-list');
+  await expect(historyList).toContainText('Frieza');
+  await expect(historyList).toContainText('external');
+  await expect(historyList).toContainText('cache');
+});
+
+test('muestra mensaje de validacion cuando la busqueda se envia vacia', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByTestId('character-search-input').fill('   ');
+  await page.getByTestId('character-search-button').click();
+
+  await expect(page.getByTestId('search-status')).toHaveText('Ingresá un nombre para buscar.');
+});
