@@ -1,6 +1,6 @@
 import { env } from '../config/env';
 import { getCachedResponse, upsertCache } from '../repositories/cacheRepository';
-import { DragonBallCharacter, CharacterSummary } from '../types/dragonball';
+import { DragonBallCharacter, DragonBallSearchResponse, CharacterSummary } from '../types/dragonball';
 
 interface SearchCharactersResult {
   items: CharacterSummary[];
@@ -39,8 +39,8 @@ export async function searchCharactersByName(name: string): Promise<SearchCharac
     return { items: cached, source: 'cache' };
   }
 
-  const response = await fetchJson<DragonBallCharacter[]>(`/characters?name=${encodeURIComponent(normalizedName)}`);
-  const items = response.map(normalizeSummary);
+  const response = await fetchJson<DragonBallSearchResponse>(`/characters?name=${encodeURIComponent(normalizedName)}`);
+  const items = response.items.map(normalizeSummary);
 
   await upsertCache({
     cacheKey,
