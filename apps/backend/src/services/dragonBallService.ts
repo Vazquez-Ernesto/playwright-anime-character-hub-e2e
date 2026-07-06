@@ -39,8 +39,11 @@ export async function searchCharactersByName(name: string): Promise<SearchCharac
     return { items: cached, source: 'cache' };
   }
 
-  const response = await fetchJson<DragonBallSearchResponse>(`/characters?name=${encodeURIComponent(normalizedName)}`);
-  const items = response.items.map(normalizeSummary);
+  const response = await fetchJson<DragonBallSearchResponse | DragonBallCharacter[]>(
+    `/characters?name=${encodeURIComponent(normalizedName)}`
+  );
+  const characters = Array.isArray(response) ? response : (response.items ?? []);
+  const items = characters.map(normalizeSummary);
 
   await upsertCache({
     cacheKey,
