@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getCharacterDetail, getSearchHistory, searchCharacters } from '../services/characterService';
+import { getCharacterDetail, getSearchHistory, clearHistory, searchCharacters } from '../services/characterService';
 
 export const characterRoutes = Router();
 
@@ -36,6 +36,15 @@ characterRoutes.get('/characters/:id', async (request, response, next) => {
 characterRoutes.get('/search-history', async (_request, response, next) => {
   try {
     response.json(await getSearchHistory());
+  } catch (error) {
+    next(error);
+  }
+});
+
+characterRoutes.delete('/search-history', async (_request, response, next) => {
+  try {
+    await clearHistory();
+    response.status(204).send();
   } catch (error) {
     next(error);
   }

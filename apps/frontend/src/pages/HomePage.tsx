@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CharacterResults } from '../components/CharacterResults';
 import { FavoritesPanel } from '../components/FavoritesPanel';
 import { SearchHistoryPanel } from '../components/SearchHistoryPanel';
 import { SearchPanel } from '../components/SearchPanel';
-import { fetchFavorites, fetchSearchHistory, searchCharacters, deleteFavorite } from '../lib/api';
+import { clearSearchHistory, deleteFavorite, fetchFavorites, fetchSearchHistory, searchCharacters } from '../lib/api';
 import type { CharacterSummary, Favorite, SearchHistoryEntry } from '../types';
 
 export function HomePage() {
-  const [query, setQuery] = useState('Goku');
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get('race') ?? 'Goku');
   const [results, setResults] = useState<CharacterSummary[]>([]);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [searchHistory, setSearchHistory] = useState<SearchHistoryEntry[]>([]);
@@ -46,6 +49,16 @@ export function HomePage() {
     await loadSidebarData();
   }
 
+  function handleRandom() {
+    const randomId = Math.floor(Math.random() * 100) + 1;
+    void navigate(`/characters/${randomId}`);
+  }
+
+  async function handleClearHistory() {
+    await clearSearchHistory();
+    await loadSidebarData();
+  }
+
   useEffect(() => {
     if (initializedRef.current) {
       return;
@@ -59,7 +72,7 @@ export function HomePage() {
   return (
     <div className="dashboard">
       <section className="main-column">
-        <SearchPanel value={query} loading={loading} onChange={setQuery} onSubmit={() => void handleSearch()} />
+        <SearchPanel value={query} loading={loading} onChange={setQuery} onSubmit={() => void handleSearch()} onRandom={handleRandom} />
         <section className="status-banner" data-testid="search-status">
           {status}
         </section>
@@ -67,7 +80,7 @@ export function HomePage() {
       </section>
       <aside className="sidebar">
         <FavoritesPanel items={favorites} onRemove={(favoriteId) => void handleRemoveFavorite(favoriteId)} />
-        <SearchHistoryPanel items={searchHistory} />
+        <SearchHistoryPanel items={searchHistory} onClear={() => void handleClearHistory()} />
       </aside>
     </div>
   );

@@ -56,3 +56,7 @@ export async function deleteFavorite(favoriteId: number) {
 export async function fetchSearchHistory() {
   return request<{ items: SearchHistoryEntry[] }>('/search-history');
 }
+
+export async function clearSearchHistory() {
+  return request<void>('/search-history', { method: 'DELETE' });
+}

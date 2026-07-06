@@ -5,7 +5,7 @@ export function AppShell() {
     <div className="app-shell">
       <header className="topbar">
         <div>
-          <p className="eyebrow">QA Automation Portfolio</p>
+          <p className="eyebrow">Dragon Ball Explorer</p>
           <h1>Anime Character Hub</h1>
         </div>
         <nav className="topbar-nav">

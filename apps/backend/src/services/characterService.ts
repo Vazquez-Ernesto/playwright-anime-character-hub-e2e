@@ -1,4 +1,4 @@
-import { createSearchHistoryEntry, listSearchHistory } from '../repositories/searchHistoryRepository';
+import { createSearchHistoryEntry, clearSearchHistory as clearSearchHistoryRepo, listSearchHistory } from '../repositories/searchHistoryRepository';
 import { getCharacterById, searchCharactersByName } from './dragonBallService';
 
 export async function searchCharacters(name: string) {
@@ -31,4 +31,8 @@ export async function getSearchHistory() {
   return {
     items: await listSearchHistory(20),
   };
+}
+
+export async function clearHistory() {
+  await clearSearchHistoryRepo();
 }

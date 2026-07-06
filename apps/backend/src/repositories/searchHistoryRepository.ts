@@ -38,6 +38,10 @@ export async function createSearchHistoryEntry(
   );
 }
 
+export async function clearSearchHistory(): Promise<void> {
+  await getPool().query('DELETE FROM search_history');
+}
+
 export async function listSearchHistory(limit = 20): Promise<SearchHistoryRecord[]> {
   const result = await getPool().query(
     `

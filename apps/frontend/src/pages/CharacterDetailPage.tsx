@@ -118,6 +118,13 @@ export function CharacterDetailPage() {
               >
                 {favorite ? 'Ya está en favoritos' : 'Guardar favorito'}
               </button>
+              <button
+                data-testid="search-by-race-button"
+                type="button"
+                onClick={() => void navigate(`/?race=${encodeURIComponent(character.race)}`)}
+              >
+                Buscar más de {character.race}
+              </button>
               <Link to="/">Volver al buscador</Link>
             </div>
             <p className="detail-status">{status}</p>
