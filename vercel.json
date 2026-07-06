@@ -1,0 +1,8 @@
+{
+  "buildCommand": "npm run build --workspace=apps/frontend",
+  "outputDirectory": "apps/frontend/dist",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/index" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

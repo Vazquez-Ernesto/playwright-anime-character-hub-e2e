@@ -6,12 +6,19 @@ import { healthRoutes } from './routes/healthRoutes';
 
 export const app = express();
 
-const allowedOrigins = new Set([
+const defaultOrigins = [
   'http://127.0.0.1:4173',
   'http://127.0.0.1:4174',
   'http://localhost:4173',
   'http://localhost:4174',
-]);
+];
+
+const extraOrigins = (process.env.ALLOWED_ORIGINS || '')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+const allowedOrigins = new Set([...defaultOrigins, ...extraOrigins]);
 
 app.use((request, response, next) => {
   const requestOrigin = typeof request.headers.origin === 'string' ? request.headers.origin : undefined;
