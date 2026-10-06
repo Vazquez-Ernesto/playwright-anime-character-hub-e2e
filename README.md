@@ -150,6 +150,29 @@ La suite Playwright cubre tres niveles:
 - API: salud, búsqueda y CRUD básico de favoritos
 - DB: validación directa de persistencia de favoritos, historial y cache
 
+### API externa: stub por defecto
+
+Los tests no llaman a `dragonball-api.com`. `playwright.config.ts` levanta un stub
+local (`tests/support/dragonball-stub/`, puerto `4010`) con personajes fijos y le
+pasa su URL al backend vía `DRAGON_BALL_API_BASE_URL`. Así la suite no falla por
+caídas o cambios de datos de un servicio de terceros.
+
+Para validar contra la API real (contrato), por ejemplo antes de un release:
+
+```bash
+DRAGON_BALL_API_MODE=live npm run test:api
+```
+
+Con `reuseExistingServer`, si ya tenés el backend corriendo con `npm run dev`
+(apuntando a la API real), Playwright lo reutiliza: frenalo antes de correr la suite.
+
+### Un solo worker
+
+Los proyectos `ui`, `api` y `db` comparten la base y cada test la trunca en su
+`beforeEach`, por eso la suite corre con `workers: 1`. Con más workers, tests de
+distintos proyectos se borran los datos entre sí (medido: 3 de 5 corridas fallaron
+con `--workers 3`).
+
 ## Pruebas manuales de API
 
 Con backend levantado en `http://127.0.0.1:4000`, podés probar desde terminal así:

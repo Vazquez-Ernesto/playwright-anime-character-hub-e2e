@@ -5,3 +5,6 @@ test-results/
 dist/
 apps/*/dist/
 apps/*/node_modules/
+
+# Build output de la suite Java (Maven)
+tests-java/target/
